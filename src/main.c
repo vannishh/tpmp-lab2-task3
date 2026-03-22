@@ -1,50 +1,39 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "purchaser_interface.h"
+#include "student.h"
+#include "functions.h"
 
-/**
- * @file main.c
- * @brief Клиентская часть программы для работы с покупателями
- * @author Иванов Иван, группа 11
- * @version 1.0
- */
+#define STUDENT_COUNT 7
 
-#define MAX_PURCHASERS 100
-
-/**
- * @brief Главная функция программы
- * @param argc Количество аргументов командной строки
- * @param argv Аргументы командной строки
- * @return 0 при успешном выполнении
- */
-int main(int argc, char* argv[]) {
-    Purchaser purchasers[MAX_PURCHASERS];
-    int count = 0;
-    int n;
+int main() {
+    STUDENT students[STUDENT_COUNT];
+    float averages[STUDENT_COUNT];
+    int current_count = STUDENT_COUNT;
     
-    /* Проверка аргументов командной строки */
-    if (argc != 2) {
-        fprintf(stderr, "Использование: %s <количество_покупателей>\n", argv[0]);
-        return EXIT_FAILURE;
-    }
+    printf("=== Программа учета успеваемости студентов ===\n");
+    printf("Ввод данных для %d студентов:\n", STUDENT_COUNT);
     
-    n = atoi(argv[1]);
-    if (n <= 0 || n > MAX_PURCHASERS) {
-        fprintf(stderr, "Ошибка: количество покупателей должно быть от 1 до %d\n", 
-                MAX_PURCHASERS);
-        return EXIT_FAILURE;
-    }
+    // 1. Создание массива записей
+    create_students(students, STUDENT_COUNT);
     
-    printf("=== Ввод данных о покупателях ===\n");
-    for (int i = 0; i < n; i++) {
-        printf("\nПокупатель %d:\n", i + 1);
-        input_purchaser(&purchasers[i]);
-        count++;
-    }
+    // 2. Вычисление среднего балла
+    calculate_averages(students, averages, STUDENT_COUNT);
     
-    print_all_purchasers(purchasers, count);
+    // Вывод всех студентов
+    print_all_students(students, averages, current_count);
     
-    print_brest_purchasers(purchasers, count);
+    // 3. Сортировка по убыванию среднего балла
+    sort_by_average(students, averages, current_count);
+    printf("\n=== После сортировки по убыванию среднего балла ===\n");
+    print_all_students(students, averages, current_count);
     
-    return EXIT_SUCCESS;
+    // 4. Вывод студентов с оценками только 4 и 5
+    print_excellent_students(students, averages, current_count);
+    
+    // 5. Удаление студента с минимальным средним баллом
+    remove_min_average_student(students, averages, &current_count);
+    printf("\n=== После удаления студента с минимальным средним баллом ===\n");
+    print_all_students(students, averages, current_count);
+    
+    return 0;
 }
