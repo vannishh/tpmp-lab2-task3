@@ -42,10 +42,8 @@ int main(int argc, char* argv[]) {
         count++;
     }
     
-    /* Вывод всех покупателей */
     print_all_purchasers(purchasers, count);
     
-    /* Вывод покупателей из Бреста */
     print_brest_purchasers(purchasers, count);
     
     return EXIT_SUCCESS;
